@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flux-dsh-ab/ledger-entry",
+  "title": "saddle A/B ledger entry — plugin harness vs direct FLUX",
+  "description": "One task execution in one arm of the embassy A/B. Stub schema: saddle judges later; nothing here asserts a winner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ts", "runId", "task", "arm", "ok", "durationMs"],
+  "properties": {
+    "ts": { "type": "string", "format": "date-time", "description": "When the entry was appended." },
+    "runId": { "type": "string", "description": "One runner invocation; groups all entries of a session." },
+    "task": { "type": "string", "description": "Task id from ab/tasks/." },
+    "arm": {
+      "type": "string",
+      "enum": ["direct", "dsh-plugin"],
+      "description": "direct = `flux run-md` CLI (or python -m flux). dsh-plugin = flux_exec tool through apply()/defineTool contract."
+    },
+    "ok": { "type": "boolean", "description": "VM-level success." },
+    "result": { "description": "Canonical R0 value if available." },
+    "cycles": { "type": ["integer", "null"], "description": "VM cycles executed, null if never ran." },
+    "error": { "type": ["string", "null"] },
+    "durationMs": { "type": "number", "description": "Wall clock of the whole call, arm-boundary to arm-boundary." },
+    "harnessOverheadMs": {
+      "type": ["number", "null"],
+      "description": "dsh-plugin arm only: time inside the harness path before/after the child process (validation, scratch write, projection). direct arm: null."
+    },
+    "timedOut": { "type": "boolean" },
+    "aborted": { "type": "boolean" },
+    "env": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Pin facts for reproducibility: dsh-tools version, flux source/commit, node/python versions.",
+      "required": ["dshTools", "fluxSource", "node"],
+      "properties": {
+        "dshTools": { "type": "string" },
+        "fluxSource": { "type": "string" },
+        "node": { "type": "string" },
+        "python": { "type": "string" }
+      }
+    },
+    "notes": { "type": ["string", "null"], "description": "Free-text anomalies; never a verdict." }
+  }
+}
