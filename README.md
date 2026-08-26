@@ -48,3 +48,7 @@ Add to a `cordis.patch.yml` row (per DSH `docs/architecture.md` § profiles):
 ```
 
 ⚠ DSH is pre-1.0 with promised breaking changes; this plugin is pinned to `dsh-v0.1.1-rc.2`. Re-read the pinned docs (see `docs/PIN.md`) before bumping.
+
+## cellular/ — the cellular seam (dsh-cellular-seam branch)
+
+One DSH tool granularized into a five-cell quilt organism (perceive/compile/heal/run + germ) with sealed ledgers and a fascia reader. See `cellular/ARCHITECTURE.md` and `cellular/VERDICT.md`. `cd cellular && npm install && npx vitest run` (20 tests, real flux runtime subprocesses).
